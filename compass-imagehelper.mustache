@@ -1,0 +1,94 @@
+/** This is a dynamically generated file **/
+
+
+$compass_imagehelper_imagesmap:(
+{{#items}}
+    "{{{path}}}": {{width}}px {{height}}px "{{{data}}}" "{{{hash}}}",
+{{/items}}
+);
+
+{{#items}}
+%{{fullname}} {
+    // width = {{{width}}};
+    // height = {{height}};
+    // type = {{type}};
+    // basename = {{basename}};
+    // path= {{{path}}}
+    // fullname = {{{fullname}}}
+    // mime = {{{mime}}};
+    // hash = {{{ hash }}}
+    background-image: inline-image("{{{ relpath }}}");
+}
+{{/items}}
+
+/**
+* Embeds the contents of an image directly inside your stylesheet, eliminating the need for another HTTP request. For small images, this can be a performance benefit at the cost of a larger generated CSS file.
+*/
+@function inline-image($image) {
+    @if map-has-key($compass_imagehelper_imagesmap, $image) {
+        $list: map-get($compass_imagehelper_imagesmap, $image);
+        @return unquote(nth($list, 3));
+    }
+    @return url('');
+}
+
+/**
+* Returns the width of the image found at the path supplied by $image relative to your project's images directory.
+*/
+@function image-width($image) {
+    @if map-has-key($compass_imagehelper_imagesmap, $image) {
+        $list: map-get($compass_imagehelper_imagesmap, $image);
+        @return nth($list, 1);
+    }
+    @return 0;
+}
+
+/**
+* Returns the height of the image found at the path supplied by $image relative to your project's images directory.
+*/
+@function image-height($image) {
+    @if map-has-key($compass_imagehelper_imagesmap, $image) {
+        $list: map-get($compass_imagehelper_imagesmap, $image);
+        @return nth($list, 2);
+    }
+    @return 0;
+}
+
+/**
+* Returns if the image is accessible for these image-helpers
+*/
+@function image-exists($image) {
+    @return map-has-key($compass_imagehelper_imagesmap, $image);
+}
+
+/**
+* Generates a path to an asset found relative to the project's images directory.
+* Passing a true value as the second argument will cause only the path to be returned instead of a url() function
+* The third argument is used to control the cache buster on a per-use basis. When set to false no cache buster will be used. When true a md5-hash of the file is appended to the url. When a string, that value will be used as the cache buster.
+*/
+@function image-url($image, $only-path: false, $cache-buster: false) {
+  $result: $image;
+
+  @if ($cache-buster==true) {
+    @if not image-exists($image) {
+      @warn "Image '#{$image}' not found. Cache-busting failed";
+    } @else {
+      @if map-has-key($compass_imagehelper_imagesmap, $image) {
+        $list: map-get($compass_imagehelper_imagesmap, $image);
+        $hash: nth($list, 4);
+        $result: #{$result} + '?' + $hash;
+      }
+    }
+  } @elseif ($cache-buster==false){
+    // nothing to do
+  } @else{
+    // probably a string
+    $result: #{$result} + '?' + $cache-buster;
+  }
+  $result: quote($result);
+  @if ($only-path==false) {
+    $result: url($result);
+  }
+
+  @return $result;
+}
