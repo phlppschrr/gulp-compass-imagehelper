@@ -1,37 +1,29 @@
 {
   "name": "gulp-compass-imagehelper",
-  "version": "0.1.0",
-  "description": "Converts images to a sass-map to be used with some compass-inspired image helpers",
-  "author": {
-    "name": "Philipp Schreier",
-    "email": "git@rgb10.de"
-  },
+  "version": "0.1.1",
+  "description": "gulp plugin for providing the compass imagehelper functions to node-sass enviroments.",
+  "author": "Philipp Schreier <git@rgb10.de>",
   "keywords": [
     "gulpplugin",
     "base64",
-    "svg",
-    "css",
-    "sass",
     "compass",
+    "sass",
+    "css",
+    "svg",
     "image"
   ],
-  "scripts": {
-    "test": "mocha"
-  },
   "main": "index.js",
   "dependencies": {
     "MD5": "^1.2.1",
-    "gulp-util": "~2.2.14",
+    "gulp-util": "~3.0.2",
     "image-size": "^0.3.5",
-    "imagesize": "~1.0.0",
     "mime": "~1.2.11",
-    "mustache": "~0.8.1",
-    "svgo": "^0.5.0",
-    "through": "~2.3.4"
+    "mustache": "~1.0.0",
+    "through": "~2.3.6"
   },
-  "devDependencies": {
-    "mocha": "~1.18.2",
-    "should": "~3.2.0-beta1",
-    "postcss": "~0.3.4"
-  }
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/phlppschrr/gulp-compass-imagehelper"
+  },
+  "license": "MIT"
 }
