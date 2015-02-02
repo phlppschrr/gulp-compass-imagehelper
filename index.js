@@ -6,9 +6,11 @@ var mustache = require('mustache');
 var sizeOf = require('image-size');
 var mime = require('mime');
 var md5 = require('MD5');
+var appRoot = require('app-root-path').path;
 
 module.exports = function (options) {
-    var buffer = [];
+    var images = [];
+    //var images_path = options.images_path || '';
 
     if (!options) options = {};
 
@@ -18,20 +20,52 @@ module.exports = function (options) {
     if(!options.targetFile)
         options.targetFile = '_compass-imagehelper.scss';
 
+    //if(!options.images_path)
+    //    options.images_path = appRoot;
+
+    //console.log(appRoot)
+
+    // The full http path to images on the web server.
+    //if (!options.http_images_path && options.relative_assets === true && options.images_path && options.css_path) {
+    //    options.http_images_path = path.relative(options.css_path, options.images_path);
+    //}
+    //
+    //if (!options.http_images_path){
+    //    options.http_images_path = '';
+    //}
+
     if(!options.prefix)
         options.prefix = '';
 
+
     var template = fs.readFileSync(options.template).toString();
+
+    var pathPrefix = function () {
+        var result = '';
+        if (options.http_images_path) {
+            result = options.http_images_path;
+        } else if (options.css_path && options.images_path) {
+            // relative path from css folder to images
+            result = path.relative(options.css_path, options.images_path);
+        } else if(options.images_path) {
+            // relative from project url
+            result = path.relative(appRoot, options.images_path);
+        } else {
+            // WARN:
+        }
+        // make sure pathPrefix ends with a trailing slash
+        if (result && result.substr(-1) != '/') {
+            result = result + '/';
+        }
+        return result;
+    };
 
 
     var bufferContents = function (file) {
-        //if (file.isNull()) {
-        //    this.push(file);
-        //    return callback();
-        //} else if (file.isStream()) {
-        //    this.emit("error", new gutil.PluginError("gulp-compass-imagehelper", "Stream content is not supported"));
-        //    return callback();
-        //}
+        if(!options.images_path) {
+            // autodetect images_path with the first file
+            options.images_path = path.relative( appRoot,  file.base);
+        }
 
         var imageInfo = {};
         var data;
@@ -46,8 +80,8 @@ module.exports = function (options) {
         imageInfo.filename = path.basename(file.path);
         imageInfo.basename = path.basename(file.path, path.extname(file.path));
         imageInfo.ext = path.extname(file.path);
-        imageInfo.path = path.relative(file.base, file.path);
-        imageInfo.fullname = imageInfo.path.split(path.sep).join('-');
+        imageInfo.path = path.relative(options.images_path, file.path);
+        imageInfo.fullname = imageInfo.path.split(path.sep).join('-').replace('.', '-');
         imageInfo.hash = md5(file.contents);
         if (mimetype == 'image/svg+xml') {
             data = encodeURIComponent(file.contents);
@@ -57,7 +91,7 @@ module.exports = function (options) {
             encoding = 'base64';
         }
         imageInfo.data = 'url(data:' + mimetype + ';' + encoding + ',' + data + ')';
-        buffer.push(imageInfo);
+        images.push(imageInfo);
 
     };
 
@@ -65,7 +99,8 @@ module.exports = function (options) {
         this.emit('data', new gutil.File({
             contents: new Buffer(mustache.render(template, {
                 prefix: options.prefix,
-                items: buffer
+                path_prefix: pathPrefix(),
+                items: images
             }), 'utf8'),
             path: options.targetFile
         }));
