@@ -38,8 +38,9 @@ gulp.task('compass-imagehelper', function () {
 ```
 
 ## Options
-* **template** Path to mustache template
-* **targetFile** Result file name
+* **template** Path to your custom mustache template.
+* **targetFile** Destination file name
+* **prefix** Optional *prefix* string which can be used in the mustache template
 
 ## Template variables
 * ```items``` Array of images data
