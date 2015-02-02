@@ -1,7 +1,7 @@
 # gulp-compass-imagehelper
 > compass-imagehelper [Gulp](https://github.com/gulpjs/gulp) plugin for providing the compass imagehelper functions to node-sass enviroments.
 
-This plugin generates a helper .scss file, which you have to @import into your own sass project. 
+This plugin generates a helper .scss file, which you have to \@import into your own sass project. 
 Inside the generated file is a sass map which contains all the image infos including a inlined data version. 
 The default mustache template also outputs a %placeholders for each image.
 Additional there are the following helper function which mimic the native functions from Compass:
@@ -28,9 +28,10 @@ var compassImagehelper = require('gulp-compass-imagehelper');
 gulp.task('compass-imagehelper', function () {
     return gulp.src('_sources/images/**/*.+(jpeg|jpg|png|gif|svg)', {base: '_sources/images'})
         .pipe(compassImagehelper({
+            targetFile: '_generated-imagehelper.scss', // default target filename is '_compass-imagehelper.scss'
             // template: 'your-compass-imagehelper.mustache',
-            // default target filename is '_compass-imagehelper.scss'
-            //targetFile: '_generated-imagehelper.scss',
+            images_path: 'assets/images/',
+            css_path: 'assets/css/',
             prefix: 'icon--'
         }))
         .pipe(gulp.dest('sass'));
@@ -40,6 +41,10 @@ gulp.task('compass-imagehelper', function () {
 ## Options
 * **template** Path to your custom mustache template.
 * **targetFile** Destination file name
+* **images_path** The path to your images folder
+* **css_path** The path to your css folder. This is needed to calculate relative paths
+* **http_images_path** The full http path to images on the web server. 
+  e.g. when set to *'/assets/images/'* image-url('icon.png') will return *'url("/assets/images/icon.png")'*
 * **prefix** Optional *prefix* string which can be used in the mustache template
 
 ## Template variables
