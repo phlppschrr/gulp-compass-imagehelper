@@ -16,8 +16,8 @@ $compass_imagehelper_imagesmap:(
     // prefix = {{prefix}};
     // width = {{{width}}};
     // height = {{height}};
-    // type = {{type}};
     // basename = {{basename}};
+    // ext = {{ext}};
     // path= {{{path}}}
     // fullname = {{{fullname}}}
     // mime = {{{mime}}};
@@ -67,7 +67,7 @@ $compass_imagehelper_imagesmap:(
 @function image-url($image, $only-path: false, $cache-buster: false) {
   $result: $image;
 
-  @if ($cache-buster==true) {
+  @if ($cache-buster == true) {
     @if not image-exists($image) {
       @warn "Image '#{$image}' not found. Cache-busting failed";
     } @else {
@@ -77,14 +77,15 @@ $compass_imagehelper_imagesmap:(
         $result: #{$result} + '?' + $hash;
       }
     }
-  } @elseif ($cache-buster==false){
+  } @elseif ($cache-buster == false){
     // nothing to do
+    // $result: $image;
   } @else{
     // probably a string
     $result: #{$result} + '?' + $cache-buster;
   }
   $result: quote($result);
-  @if ($only-path==false) {
+  @if ($only-path == false) {
     $result: url($result);
   }
   @return $result;
@@ -95,5 +96,5 @@ $compass_imagehelper_imagesmap:(
 * Note: Not part of the official compass functions, but still useful
 */
 @function image-exists($image) {
-@return map-has-key($compass_imagehelper_imagesmap, $image);
+  @return map-has-key($compass_imagehelper_imagesmap, $image);
 }

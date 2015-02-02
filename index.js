@@ -42,11 +42,10 @@ module.exports = function (options) {
 
         imageInfo.width = dimensions.width;
         imageInfo.height = dimensions.height;
-        imageInfo.type = dimensions.type;
         imageInfo.mime = mimetype;
         imageInfo.filename = path.basename(file.path);
-        imageInfo.basename = path.basename(file.path, '.' + file.ext);
-        imageInfo.ext = file.ext;
+        imageInfo.basename = path.basename(file.path, path.extname(file.path));
+        imageInfo.ext = path.extname(file.path);
         imageInfo.path = path.relative(file.base, file.path);
         imageInfo.fullname = imageInfo.path.split(path.sep).join('-');
         imageInfo.hash = md5(file.contents);

@@ -43,15 +43,16 @@ gulp.task('compass-imagehelper', function () {
 * **prefix** Optional *prefix* string which can be used in the mustache template
 
 ## Template variables
+Your mustache template can use all of theses properties. The default template only uses a subset from this.
 * ```items``` Array of images data
 * ```items[i].data``` Data URI string
 * ```items[i].width``` Image width in pixels;
 * ```items[i].height``` Image height in pixels;
-* ```items[i].type``` File Extension;
-* ```items[i].basename``` Filename without extension;
 * ```items[i].filename``` Filename with extension;
+* ```items[i].basename``` Filename without extension;
+* ```items[i].ext``` File Extension including dot, e.g. '.png';
 * ```items[i].path``` Filepath relative to the project's images directory. Same as *filename* if gulp.src() was used without *base* option
-* ```items[i].fullname``` Same as path, but '/' replaced by '-'
+* ```items[i].fullname``` Same as path, but directory separators are replaced by '-'
 * ```items[i].mime``` MIME-Type of the file
 * ```items[i].hash``` MD5 Hash of the file
 
