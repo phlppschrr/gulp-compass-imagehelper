@@ -42,16 +42,17 @@ gulp.task('compass-imagehelper', function () {
 * **targetFile** Result file name
 
 ## Template variables
-* **items** Array of images data
-* **items[i].data** Data URI string
-* **items[i].width** Image width in pixels;
-* **items[i].height** Image height in pixels;
-* **items[i].type** File Extension;
-* **items[i].basename** Filename without extension;
-* **items[i].path** Filepath relative to the project's images directory
-* **items[i].fullname** Same as path, but '/' replaced by '-'
-* **items[i].mime** MIME-Type of the file
-* **items[i].hash** MD5 Hash of the file
+* ```items``` Array of images data
+* ```items[i].data``` Data URI string
+* ```items[i].width``` Image width in pixels;
+* ```items[i].height``` Image height in pixels;
+* ```items[i].type``` File Extension;
+* ```items[i].basename``` Filename without extension;
+* ```items[i].filename``` Filename with extension;
+* ```items[i].path``` Filepath relative to the project's images directory. Same as *filename* if gulp.src() was used without *base* option
+* ```items[i].fullname``` Same as path, but '/' replaced by '-'
+* ```items[i].mime``` MIME-Type of the file
+* ```items[i].hash``` MD5 Hash of the file
 
 ### License
 [MIT License](http://en.wikipedia.org/wiki/MIT_License)
