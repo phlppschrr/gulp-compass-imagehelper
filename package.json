@@ -26,5 +26,8 @@
     "type": "git",
     "url": "https://github.com/phlppschrr/gulp-compass-imagehelper"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "svgo": "^0.5.0"
+  }
 }

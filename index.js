@@ -6,6 +6,8 @@ var mustache = require('mustache');
 var sizeOf = require('image-size');
 var mime = require('mime');
 var md5 = require('MD5');
+var SVGO = require('svgo');
+var svgo = new SVGO();
 var appRoot = require('app-root-path').path;
 
 module.exports = function (options) {
@@ -19,20 +21,6 @@ module.exports = function (options) {
 
     if(!options.targetFile)
         options.targetFile = '_compass-imagehelper.scss';
-
-    //if(!options.images_path)
-    //    options.images_path = appRoot;
-
-    //console.log(appRoot)
-
-    // The full http path to images on the web server.
-    //if (!options.http_images_path && options.relative_assets === true && options.images_path && options.css_path) {
-    //    options.http_images_path = path.relative(options.css_path, options.images_path);
-    //}
-    //
-    //if (!options.http_images_path){
-    //    options.http_images_path = '';
-    //}
 
     if(!options.prefix)
         options.prefix = '';
@@ -50,9 +38,8 @@ module.exports = function (options) {
         } else if(options.images_path) {
             // relative from project url
             result = path.relative(appRoot, options.images_path);
-        } else {
-            // WARN:
         }
+
         // make sure pathPrefix ends with a trailing slash
         if (result && result.substr(-1) != '/') {
             result = result + '/';
@@ -72,8 +59,31 @@ module.exports = function (options) {
         var encoding;
 
         var mimetype = mime.lookup(file.path);
-        var dimensions = sizeOf(file.path);
+        var dimensions;
 
+        if (mimetype == 'image/svg+xml') {
+            //data = encodeURIComponent(file.contents.toString());
+            //encoding = 'utf8';
+            data = file.contents.toString('base64');
+            encoding = 'base64';
+            try{
+                dimensions = sizeOf(file.path);
+            } catch(e){
+                // could not read width/height from svg. Try again with the slower svgo parser:
+                svgo.optimize(file.contents.toString(), function(res) {
+                    dimensions = {
+                        width: res.info.width,
+                        height: res.info.height
+                    };
+                    console.log(res);
+                });
+            }
+
+        } else {
+            data = file.contents.toString('base64');
+            encoding = 'base64';
+            dimensions= sizeOf(file.path);
+        }
         imageInfo.width = dimensions.width;
         imageInfo.height = dimensions.height;
         imageInfo.mime = mimetype;
@@ -83,13 +93,6 @@ module.exports = function (options) {
         imageInfo.path = path.relative(options.images_path, file.path);
         imageInfo.fullname = imageInfo.path.split(path.sep).join('-').replace('.', '-');
         imageInfo.hash = md5(file.contents);
-        if (mimetype == 'image/svg+xml') {
-            data = encodeURIComponent(file.contents);
-            encoding = 'utf8';
-        } else {
-            data = file.contents.toString('base64');
-            encoding = 'base64';
-        }
         imageInfo.data = 'url(data:' + mimetype + ';' + encoding + ',' + data + ')';
         images.push(imageInfo);
 
