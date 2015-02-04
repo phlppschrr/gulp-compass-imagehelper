@@ -16,10 +16,11 @@
   "dependencies": {
     "MD5": "^1.2.1",
     "app-root-path": "^1.0.0",
-    "gulp-util": "~3.0.2",
+    "gulp-util": "~3.0.3",
     "image-size": "^0.3.5",
     "mime": "~1.2.11",
     "mustache": "~1.0.0",
+    "svgo": "^0.5.0",
     "through": "~2.3.6"
   },
   "repository": {
@@ -27,7 +28,5 @@
     "url": "https://github.com/phlppschrr/gulp-compass-imagehelper"
   },
   "license": "MIT",
-  "devDependencies": {
-    "svgo": "^0.5.0"
-  }
+  "devDependencies": {}
 }

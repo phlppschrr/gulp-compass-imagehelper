@@ -1,5 +1,5 @@
-var gulp = require('gulp');
-var sass = require('gulp-sass');
+var gulp               = require('gulp');
+var sass               = require('gulp-sass');
 var compassImagehelper = require('..');
 
 
@@ -24,16 +24,6 @@ gulp.task('sass', function (cb) {
     return gulp.src('sass/main.scss')
             .pipe(sass({ errLogToConsole: true }))
             .pipe(gulp.dest('./css'));
-});
-
-gulp.task('imgBase', function() {
-    var baseimg = require('gulp-baseimg');
-    gulp.src(paths.images)
-            .pipe(baseimg({
-                styleTemplate: './tmp.css.mustache',
-                styleName: '_data_gen.scss'
-            }))
-            .pipe(gulp.dest('./sass'));
 });
 
 

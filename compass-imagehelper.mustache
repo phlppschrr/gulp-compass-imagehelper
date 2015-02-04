@@ -29,10 +29,8 @@ $compass_imagehelper_imagesmap:(
 
 
 @if not(function_exists('inline-image')) {
-
-  /**
-  * Embeds the contents of an image directly inside your stylesheet, eliminating the need for another HTTP request. For small images, this can be a performance benefit at the cost of a larger generated CSS file.
-  */
+  // Embeds the contents of an image directly inside your stylesheet, eliminating the need for another HTTP request. For small images, this can be a performance
+  // benefit at the cost of a larger generated CSS file.
   @function inline-image($image) {
     @if map-has-key($compass_imagehelper_imagesmap, $image) {
       $list: map-get($compass_imagehelper_imagesmap, $image);
@@ -41,9 +39,7 @@ $compass_imagehelper_imagesmap:(
     @return null;
   }
 
-  /**
-  * Returns the width of the image found at the path supplied by $image relative to your project's images directory.
-  */
+  // Returns the width of the image found at the path supplied by $image relative to your project's images directory.
   @function image-width($image) {
     @if map-has-key($compass_imagehelper_imagesmap, $image) {
       $list: map-get($compass_imagehelper_imagesmap, $image);
@@ -55,9 +51,7 @@ $compass_imagehelper_imagesmap:(
     @return null;
   }
 
-  /**
-  * Returns the height of the image found at the path supplied by $image relative to your project's images directory.
-  */
+  // Returns the height of the image found at the path supplied by $image relative to your project's images directory.
   @function image-height($image) {
     @if map-has-key($compass_imagehelper_imagesmap, $image) {
       $list: map-get($compass_imagehelper_imagesmap, $image);
@@ -69,11 +63,10 @@ $compass_imagehelper_imagesmap:(
     @return null;
   }
 
-  /**
-  * Generates a path to an asset found relative to the project's images directory.
-  * Passing a true value as the second argument will cause only the path to be returned instead of a url() function
-  * The third argument is used to control the cache buster on a per-use basis. When set to false no cache buster will be used. When true a md5-hash of the file is appended to the url. When a string, that value will be used as the cache buster.
-  */
+  // Generates a path to an asset found relative to the project's images directory.
+  // Passing a true value as the second argument will cause only the path to be returned instead of a url() function
+  // The third argument is used to control the cache buster on a per-use basis. When set to false no cache buster will be used.
+  // When true a md5-hash of the file is appended to the url. When a string, that value will be used as the cache buster.
   @function image-url($image, $only-path: false, $cache-buster: false) {
     $result: "../images/" + $image;
 
@@ -88,8 +81,6 @@ $compass_imagehelper_imagesmap:(
         }
       }
     } @else if ($cache-buster == false) {
-      // nothing to do
-      // $result: $image;
     } @else {
       // probably a string
       $result: #{$result} + '?' + $cache-buster;
@@ -101,10 +92,8 @@ $compass_imagehelper_imagesmap:(
     @return $result;
   }
 
-  /**
-  * Returns if the image is accessible for these image-helpers
-  * Note: Not part of the official compass functions, but still useful
-  */
+  // Returns if the image is accessible for these image-helpers
+  // Note: Not part of the official compass functions, but still useful
   @function image-exists($image) {
     @return map-has-key($compass_imagehelper_imagesmap, $image);
   }
@@ -112,13 +101,12 @@ $compass_imagehelper_imagesmap:(
   // Two helper functions for casting string to number by Hugo Giraudel
   // http://hugogiraudel.com/2014/01/15/sass-string-to-number/
   // http://sassmeister.com/gist/9647408
-
   @function _length($number, $unit) {
     $strings: 'px' 'cm' 'mm' '%' 'ch' 'pica' 'in' 'em' 'rem' 'pt' 'pc' 'ex' 'vw' 'vh' 'vmin' 'vmax';
     $units: 1px 1cm 1mm 1% 1ch 1 pica 1in 1em 1rem 1pt 1pc 1ex 1vw 1vh 1vmin 1vmax;
     $index: index($strings, $unit);
 
-    @if not $index {
+    @if not ($index) {
       @warn "Unknown unit `#{$unit}`.";
       @return false;
     }
@@ -146,7 +134,7 @@ $compass_imagehelper_imagesmap:(
       } @else if $character == '.' {
         $divider: 1;
       } @else {
-        @if not $index {
+        @if not ($index) {
           $result: if($minus, $result * -1, $result);
           @return _length($result, str-slice($string, $i));
         }
