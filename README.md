@@ -38,7 +38,7 @@ gulp.task('compass-imagehelper', function () {
 });
 ```
 
-For a complete example look into the [example project](example/) included in this repo. 
+**For a complete example look into the included [example project](./example/).**
 
 ## Options
 * **template** Path to your custom mustache template.
