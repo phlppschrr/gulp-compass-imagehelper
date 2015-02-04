@@ -26,3 +26,8 @@
   background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDQ4IDQ4Ij48cGF0aCBkPSJNMjguOTMgMjdMMjIgNDBWMjloLTRsMS4wNy0ySDE0djE0LjMzQzE0IDQyLjggMTUuMTkgNDQgMTYuNjcgNDRoMTQuNjdjMS40NyAwIDIuNjctMS4xOSAyLjY3LTIuNjdWMjdoLTUuMDh6Ii8+PHBhdGggZmlsbC1vcGFjaXR5PSIuMyIgZD0iTTMxLjMzIDhIMjhWNGgtOHY0aC0zLjMzQzE1LjE5IDggMTQgOS4xOSAxNCAxMC42N1YyN2g1LjA3TDI2IDE0djExaDRsLTEuMDcgMkgzNFYxMC42N0MzNCA5LjE5IDMyLjgxIDggMzEuMzMgOHoiLz48L3N2Zz4=);
   padding-left: 58px;
   min-height: 48px; }
+
+.icon--imageurl {
+  background-image: url("../images/battery_50.png");
+  padding-left: 58px;
+  min-height: 48px; }

@@ -35,4 +35,11 @@
   min-height: image-height($img);
 }
 
+.icon--imageurl{
+  $img: 'battery_50.png';
+  background-image: image-url($img);
+  padding-left: image-width($img) + 10px;
+  min-height: image-height($img);
+}
+
 
