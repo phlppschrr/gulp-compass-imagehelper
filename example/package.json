@@ -1,6 +1,6 @@
 {
   "name": "gulp-compass-imagehelper-example",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A small usage and output example of the gulp-compass-imagehelper plugin ",
   "main": "index.js",
   "scripts": {
