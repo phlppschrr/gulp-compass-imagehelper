@@ -3,31 +3,6 @@
 * Do NOT edit!
 **/
 
-$compass_imagehelper_imagesmap:(
-{{#items}}
-    "{{{path}}}": "{{width}}" "{{height}}" "{{{data}}}" "{{{hash}}}",
-{{/items}}
-);
-
-{{#items}}
-%{{prefix}}{{fullname}} {
-    // Available properties:
-    // prefix: {{prefix}};
-    // width: {{{width}}};
-    // height: {{height}};
-    // filename: {{filename}};
-    // basename: {{basename}};
-    // ext: {{ext}};
-    // path: {{{path}}};
-    // fullname: {{{fullname}}};
-    // mime: {{{mime}}};
-    // hash: {{{ hash }}};
-    background-image: inline-image("{{{ path }}}");
-}
-{{/items}}
-
-
-
 @if not(function_exists('inline-image')) {
   // Embeds the contents of an image directly inside your stylesheet, eliminating the need for another HTTP request. For small images, this can be a performance
   // benefit at the cost of a larger generated CSS file.
@@ -157,3 +132,26 @@ $compass_imagehelper_imagesmap:(
   }
 
 }
+
+$compass_imagehelper_imagesmap:(
+{{#items}}
+    "{{{path}}}": "{{width}}" "{{height}}" "{{{data}}}" "{{{hash}}}",
+{{/items}}
+);
+
+{{#items}}
+    %{{prefix}}{{fullname}} {
+    // Available properties:
+    // prefix: {{prefix}};
+    // width: {{{width}}};
+    // height: {{height}};
+    // filename: {{filename}};
+    // basename: {{basename}};
+    // ext: {{ext}};
+    // path: {{{path}}};
+    // fullname: {{{fullname}}};
+    // mime: {{{mime}}};
+    // hash: {{{ hash }}};
+    background-image: inline-image("{{{ path }}}");
+    }
+{{/items}}
