@@ -1,5 +1,5 @@
 # gulp-compass-imagehelper
-> compass-imagehelper [Gulp](https://github.com/gulpjs/gulp) plugin for providing the compass imagehelper functions to node-sass enviroments.
+> compass-imagehelper [Gulp](https://github.com/gulpjs/gulp) plugin for polyfilling the compass imagehelper functions to node-sass enviroments.
 
 This plugin generates a helper .scss file, which you have to @import into your own sass project. The generated sass file acts as a polyfill: 
 Inside the generated file is a sass map which contains all the image infos including a inlined data version. 
@@ -57,6 +57,7 @@ Your mustache template can use all of theses properties. The default template on
 * ```items[i].height``` Image height in pixels;
 * ```items[i].filename``` Filename with extension;
 * ```items[i].basename``` Filename without extension;
+* ```items[i].dirname``` Name of the images parent directory;
 * ```items[i].ext``` File Extension including dot, e.g. '.png';
 * ```items[i].path``` Filepath relative to the project's images directory.
 * ```items[i].fullname``` Same as path, but directory separators and dots are replaced by '-'. Useful if you want to generate unique named placeholders.

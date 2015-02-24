@@ -89,6 +89,7 @@ module.exports = function (options) {
         imageInfo.mime = mimetype;
         imageInfo.filename = path.basename(file.path);
         imageInfo.basename = path.basename(file.path, path.extname(file.path));
+        imageInfo.dirname = path.basename(path.dirname(file.path));
         imageInfo.ext = path.extname(file.path);
         imageInfo.path = path.relative(options.images_path, file.path);
         imageInfo.fullname = imageInfo.path.split(path.sep).join('-').replace('.', '-');
