@@ -1,5 +1,5 @@
 var fs = require('fs');
-var path = require('path');
+var path = require('canonical-path');
 var gutil = require('gulp-util');
 var through = require('through');
 var mustache = require('mustache');
