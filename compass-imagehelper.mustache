@@ -52,13 +52,13 @@
         @if map-has-key($compass_imagehelper_imagesmap, $image) {
           $list: map-get($compass_imagehelper_imagesmap, $image);
           $hash: nth($list, 4);
-          $result: #{$result} + '?' + $hash;
+          $result: $result + '?' + $hash;
         }
       }
     } @else if ($cache-buster == false) {
     } @else {
       // probably a string
-      $result: #{$result} + '?' + $cache-buster;
+      $result: $result + '?' + $cache-buster;
     }
     $result: quote($result);
     @if ($only-path == false) {
