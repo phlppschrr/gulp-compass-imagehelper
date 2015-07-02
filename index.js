@@ -92,7 +92,7 @@ module.exports = function (options) {
         imageInfo.dirname = path.basename(path.dirname(file.path));
         imageInfo.ext = path.extname(file.path);
         imageInfo.path = path.relative(options.images_path, file.path);
-        imageInfo.fullname = imageInfo.path.split(path.sep).join('-').replace('.', '-');
+        imageInfo.fullname = imageInfo.path.split('/').join('-').path.split('\\').join('-').replace('.', '-');
         imageInfo.hash = md5(file.contents);
         imageInfo.data = 'url(data:' + mimetype + ';' + encoding + ',' + data + ')';
         images.push(imageInfo);
