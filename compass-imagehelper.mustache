@@ -43,7 +43,7 @@
   // The third argument is used to control the cache buster on a per-use basis. When set to false no cache buster will be used.
   // When true a md5-hash of the file is appended to the url. When a string, that value will be used as the cache buster.
   @function image-url($image, $only-path: false, $cache-buster: false) {
-    $result: "../images/" + $image;
+    $result: "{{{path_prefix}}}" + $image;
 
     @if ($cache-buster == true) {
       @if not (image-exists($image)) {
