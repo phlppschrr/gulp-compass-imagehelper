@@ -12,19 +12,23 @@ var appRoot = require('app-root-path').path;
 
 module.exports = function (options) {
     var images = [];
-    //var images_path = options.images_path || '';
+    var encoding = 'base64';
 
-    if (!options) options = {};
+    if (!options) {
+        options = {};
+    }
 
-    if(!options.template)
+    if (!options.template) {
         options.template = path.join(__dirname, 'compass-imagehelper.mustache');
+    }
 
-    if(!options.targetFile)
+    if (!options.targetFile) {
         options.targetFile = '_compass-imagehelper.scss';
+    }
 
-    if(!options.prefix)
+    if (!options.prefix) {
         options.prefix = '';
-
+    }
 
     var template = fs.readFileSync(options.template).toString();
 
@@ -35,7 +39,7 @@ module.exports = function (options) {
         } else if (options.css_path && options.images_path) {
             // relative path from css folder to images
             result = path.relative(options.css_path, options.images_path);
-        } else if(options.images_path) {
+        } else if (options.images_path) {
             // relative from project url
             result = path.relative(appRoot, options.images_path);
         }
@@ -47,57 +51,70 @@ module.exports = function (options) {
         return result;
     };
 
+    var isSet = function (val) {
+        return typeof val !== "undefined" && val !== null;
+    };
+
+    var getSvgDimensions = function (file) {
+        var dimensions = {
+            width: undefined,
+            height: undefined
+        };
+
+        try {
+            dimensions = sizeOf(file.path);
+        } catch (e) {
+            // could not read width/height from svg. Try again with the slower svgo parser:
+            svgo.optimize(file.contents.toString(), function (res) {
+                // check if dimensions could be read, log notice if not
+                if (!isSet(res) || !isSet(res.info) || !isSet(res.info.width) || !isSet(res.info.height)) {
+                    var filePath = path.relative(options.images_path, file.path);
+                    gutil.log(gutil.colors.yellow("NOTICE"), "Image Dimensions could not be determined for:", gutil.colors.cyan(filePath));
+                    return;
+                }
+                dimensions = {
+                    width: res.info.width,
+                    height: res.info.height
+                };
+            });
+        }
+
+        return dimensions;
+    };
 
     var bufferContents = function (file) {
-        if(!options.images_path) {
+        if (!options.images_path) {
             // autodetect images_path with the first file
-            options.images_path = path.relative( appRoot,  file.base);
+            options.images_path = path.relative(appRoot, file.base);
         }
 
         var imageInfo = {};
-        var data;
-        var encoding;
+        // var encoding = 'base64';
+        var data = file.contents.toString(encoding);
 
         var mimetype = mime.lookup(file.path);
         var dimensions;
 
         if (mimetype == 'image/svg+xml') {
-            //data = encodeURIComponent(file.contents.toString());
-            //encoding = 'utf8';
-            data = file.contents.toString('base64');
-            encoding = 'base64';
-            try{
-                dimensions = sizeOf(file.path);
-            } catch(e){
-                // could not read width/height from svg. Try again with the slower svgo parser:
-                svgo.optimize(file.contents.toString(), function(res) {
-                    dimensions = {
-                        width: res.info.width,
-                        height: res.info.height
-                    };
-                    console.log(res);
-                });
-            }
-
+            dimensions = getSvgDimensions(file);
         } else {
-            data = file.contents.toString('base64');
-            encoding = 'base64';
-            dimensions= sizeOf(file.path);
+            dimensions = sizeOf(file.path);
         }
-        imageInfo.width = dimensions.width;
-        imageInfo.height = dimensions.height;
-        imageInfo.mime = mimetype;
-        imageInfo.filename = path.basename(file.path);
-        imageInfo.basename = path.basename(file.path, path.extname(file.path));
-        imageInfo.dirname = path.basename(path.dirname(file.path));
-        imageInfo.ext = path.extname(file.path);
-        imageInfo.path = path.relative(options.images_path, file.path);
-        // Replace /, \ and . with -
-        imageInfo.fullname = imageInfo.path.replace(/[\/\\\.]/g, '-');
-        imageInfo.hash = md5(file.contents);
-        imageInfo.data = 'url(data:' + mimetype + ';' + encoding + ',' + data + ')';
-        images.push(imageInfo);
 
+        imageInfo.width     = dimensions.width;
+        imageInfo.height    = dimensions.height;
+        imageInfo.mime      = mimetype;
+        imageInfo.filename  = path.basename(file.path);
+        imageInfo.basename  = path.basename(file.path, path.extname(file.path));
+        imageInfo.dirname   = path.basename(path.dirname(file.path));
+        imageInfo.ext       = path.extname(file.path);
+        imageInfo.path      = path.relative(options.images_path, file.path);
+        // Replace /, \ and . with -
+        imageInfo.fullname  = imageInfo.path.replace(/[\/\\\.]/g, '-');
+        imageInfo.hash      = md5(file.contents);
+        imageInfo.data      = 'url(data:' + mimetype + ';' + encoding + ',' + data + ')';
+
+        images.push(imageInfo);
     };
 
     var endStream = function () {
