@@ -109,8 +109,8 @@ module.exports = function (options) {
         imageInfo.dirname   = path.basename(path.dirname(file.path));
         imageInfo.ext       = path.extname(file.path);
         imageInfo.path      = path.relative(options.images_path, file.path);
-        // Replace /, \ and . with -
-        imageInfo.fullname  = imageInfo.path.replace(/[\/\\\.]/g, '-');
+        // Replace /, \, . and @ with -
+        imageInfo.fullname  = imageInfo.path.replace(/[\/\\\.@]/g, '-');
         imageInfo.hash      = md5(file.contents);
         imageInfo.data      = 'url(data:' + mimetype + ';' + encoding + ',' + data + ')';
 
