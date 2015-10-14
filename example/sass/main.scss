@@ -1,4 +1,4 @@
-@import "compass-imagehelper";
+@import 'compass-imagehelper';
 
 .icons {
   list-style: none;
@@ -8,6 +8,7 @@
   > li {
     padding-top: 1em;
     padding-bottom: 1em;
+
     &:nth-child(even) {
       background-color: #eee;
     }
@@ -20,7 +21,6 @@
   background-position: 0 50%;
 }
 
-
 .icon--battery_50-png {
   $img: 'battery_50.png';
   background-image: inline-image($img);
@@ -30,16 +30,14 @@
 
 .icon--battery_50-svg {
   $img: 'battery_50.svg';
-  background-image: inline-image($img);
+  @extend %icon--battery_50-svg;
   padding-left: image-width($img) + 10px;
   min-height: image-height($img);
 }
 
-.icon--imageurl{
+.icon--imageurl {
   $img: 'battery_50.png';
   background-image: image-url($img);
   padding-left: image-width($img) + 10px;
   min-height: image-height($img);
 }
-
-

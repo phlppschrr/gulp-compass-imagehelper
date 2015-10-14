@@ -22,6 +22,14 @@ module.exports = function (options) {
         options.template = path.join(__dirname, 'compass-imagehelper.mustache');
     }
 
+    if (options.includeData !== false) {
+        options.includeData = true;
+    }
+
+    if (options.createPlaceholder !== false) {
+        options.createPlaceholder = true;
+    }
+
     if (!options.targetFile) {
         options.targetFile = '_compass-imagehelper.scss';
     }
@@ -122,7 +130,9 @@ module.exports = function (options) {
             contents: new Buffer(mustache.render(template, {
                 prefix: options.prefix,
                 path_prefix: pathPrefix(),
-                items: images
+                items: images,
+                includeData: options.includeData,
+                createPlaceholder: options.createPlaceholder
             }), 'utf8'),
             path: options.targetFile
         }));

@@ -4,37 +4,42 @@
 // =================================================================
 
 @if not(function-exists('inline-image')) {
+  {{#includeData}}
   // Embeds the contents of an image directly inside your stylesheet, eliminating the need for another HTTP request. For small images, this can be a performance
   // benefit at the cost of a larger generated CSS file.
   @function inline-image($image) {
-    @if map-has-key($compass-imagehelper-imagesmap, $image) {
+    @if image-exists($image) {
       $list: map-get($compass-imagehelper-imagesmap, $image);
-      @return unquote(nth($list, 3));
+      @return unquote(map-get($list, 'data'));
     }
+    @warn "Image '#{$image}' not found.";
     @return null;
   }
 
+  {{/includeData}}
   // Returns the width of the image found at the path supplied by $image relative to your project's images directory.
   @function image-width($image) {
-    @if map-has-key($compass-imagehelper-imagesmap, $image) {
+    @if image-exists($image) {
       $list: map-get($compass-imagehelper-imagesmap, $image);
-      $width: unquote(nth($list, 1));
+      $width: unquote(map-get($list, 'width'));
       @if ($width and str-length($width) > 0) {
         @return number($width) * 1px;
       }
     }
+    @warn "Image '#{$image}' not found.";
     @return null;
   }
 
   // Returns the height of the image found at the path supplied by $image relative to your project's images directory.
   @function image-height($image) {
-    @if map-has-key($compass-imagehelper-imagesmap, $image) {
+    @if image-exists($image) {
       $list: map-get($compass-imagehelper-imagesmap, $image);
-      $height: unquote(nth($list, 2));
-      @if ($height and str-length($height)>0) {
+      $height: unquote(map-get($list, 'height'));
+      @if ($height and str-length($height) > 0) {
         @return number($height) * 1px;
       }
     }
+    @warn "Image '#{$image}' not found.";
     @return null;
   }
 
@@ -45,25 +50,26 @@
   @function image-url($image, $only-path: false, $cache-buster: false) {
     $result: $compass-imagehelper-path-prefix + $image;
 
-    @if ($cache-buster == true) {
-      @if not (image-exists($image)) {
-        @warn "Image '#{$image}' not found. Cache-busting failed";
-      } @else {
-        @if map-has-key($compass-imagehelper-imagesmap, $image) {
-          $list: map-get($compass-imagehelper-imagesmap, $image);
-          $hash: nth($list, 4);
-          $result: $result + '?' + $hash;
-        }
-      }
-    } @else if ($cache-buster == false) {
+    @if not (image-exists($image)) {
+      @warn "Image '#{$image}' not found.";
     } @else {
-      // probably a string
-      $result: $result + '?' + $cache-buster;
+      @if (type-of($cache-buster) == string) {
+        $result: $result + '?' + $cache-buster;
+      }
+
+      @if ($cache-buster == true) {
+        $list: map-get($compass-imagehelper-imagesmap, $image);
+        $hash: map-get($list, 'hash');
+        $result: $result + '?' + $hash;
+      }
     }
+
     $result: quote($result);
+
     @if ($only-path == false) {
       $result: url($result);
     }
+
     @return $result;
   }
 
@@ -137,9 +143,17 @@ $compass-imagehelper-path-prefix: '{{{path_prefix}}}';
 
 $compass-imagehelper-imagesmap: (
 {{#items}}
-  '{{{path}}}': '{{width}}' '{{height}}' '{{{data}}}' '{{{hash}}}',
+  '{{{path}}}': (
+    width: '{{width}}',
+    height: '{{height}}',
+    {{#includeData}}
+    data: '{{{data}}}',
+    {{/includeData}}
+    hash: '{{{hash}}}'
+  ),
 {{/items}}
 );
+{{#createPlaceholder}}
 
 {{#items}}
 %{{prefix}}{{fullname}} {
@@ -155,7 +169,13 @@ $compass-imagehelper-imagesmap: (
   // fullname: {{{fullname}}};
   // mime: {{{mime}}};
   // hash: {{{ hash }}};
+  {{#includeData}}
   background-image: inline-image('{{{ path }}}');
+  {{/includeData}}
+  {{^includeData}}
+  background-image: image-url('{{{ path }}}');
+  {{/includeData}}
 }
 
 {{/items}}
+{{/createPlaceholder}}
