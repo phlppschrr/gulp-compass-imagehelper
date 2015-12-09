@@ -3,6 +3,12 @@
 // Do NOT edit!
 // =================================================================
 
+// Returns if the image is accessible for these image-helpers
+// Note: Not part of the official compass functions, but still useful
+@function image-exists($image) {
+  @return map-has-key($compass-imagehelper-imagesmap, $image);
+}
+
 @if not(function-exists('inline-image')) {
   // Embeds the contents of an image directly inside your stylesheet, eliminating the need for another HTTP request. For small images, this can be a performance
   // benefit at the cost of a larger generated CSS file.
@@ -14,7 +20,9 @@
     @warn "Image '#{$image}' not found.";
     @return null;
   }
+}
 
+@if not(function-exists('image-width')) {
   // Returns the width of the image found at the path supplied by $image relative to your project's images directory.
   @function image-width($image) {
     @if image-exists($image) {
@@ -27,7 +35,9 @@
     @warn "Image '#{$image}' not found.";
     @return null;
   }
+}
 
+@if not(function-exists('image-height')) {
   // Returns the height of the image found at the path supplied by $image relative to your project's images directory.
   @function image-height($image) {
     @if image-exists($image) {
@@ -40,7 +50,9 @@
     @warn "Image '#{$image}' not found.";
     @return null;
   }
+}
 
+@if not(function-exists('image-url')) {
   // Generates a path to an asset found relative to the project's images directory.
   // Passing a true value as the second argument will cause only the path to be returned instead of a url() function
   // The third argument is used to control the cache buster on a per-use basis. When set to false no cache buster will be used.
@@ -70,13 +82,9 @@
 
     @return $result;
   }
+}
 
-  // Returns if the image is accessible for these image-helpers
-  // Note: Not part of the official compass functions, but still useful
-  @function image-exists($image) {
-    @return map-has-key($compass-imagehelper-imagesmap, $image);
-  }
-
+@if not(function-exists('_length')) {
   // Two helper functions for casting string to number by Hugo Giraudel
   // http://hugogiraudel.com/2014/01/15/sass-string-to-number/
   // http://sassmeister.com/gist/9647408
@@ -92,7 +100,9 @@
 
     @return $number * nth($units, $index);
   }
+}
 
+@if not(function-exists('number')) {
   @function number($string) {
     // Matrices
     $strings: '0' '1' '2' '3' '4' '5' '6' '7' '8' '9';
@@ -134,7 +144,6 @@
 
     @return if($minus, $result * -1, $result);
   }
-
 }
 
 $compass-imagehelper-path-prefix: '../images/';
