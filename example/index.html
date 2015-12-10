@@ -22,13 +22,13 @@
     <li class="icon icon--battery_50-svg">
         <pre><code>.icon--battery_50-svg {
     $img: 'battery_50.svg';
-    background-image: inline-image($img);
+    @extend %icon--battery_50-svg;
     padding-left: image-width($img);
     height: image-height($img);
 }</code></pre>
     </li>
     <li class="icon icon--imageurl">
-        <pre><code>.icon--imageurl{
+        <pre><code>.icon--imageurl {
     $img: 'battery_50.png';
     background-image: image-url($img);
     padding-left: image-width($img) + 10px;

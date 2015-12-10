@@ -48,6 +48,8 @@ gulp.task('compass-imagehelper', function () {
 * **http_images_path** The full http path to images on the web server. 
   e.g. when set to *'/assets/images/'* image-url('icon.png') will return *'url("/assets/images/icon.png")'*
 * **prefix** Optional *prefix* string which can be used in the mustache template
+* **includeData** By default the base64 encoded data of the images will be placed in the image hash. If you want don't inline your images you can set this to *false* to disable inline-images. If you are using your own template you have to implement the condition for this to work.
+* **createPlaceholder** By default placeholder will be created that can be used with *@extended*. If you don't need this placeholder classes you can set this option to *false* to disable it. If you are using your own template you have to implement the condition for this to work.
 
 ## Template variables
 Your mustache template can use all of theses properties. The default template only uses a subset from this.
