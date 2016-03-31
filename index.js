@@ -74,7 +74,6 @@ module.exports = function (options) {
             width: res.info.width,
             height: res.info.height,
           };
-          console.log(res);
         });
       }
 
