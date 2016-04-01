@@ -15,13 +15,13 @@ module.exports = function (options) {
   if (!options) options = {};
 
   if (!options.template)
-      options.template = path.join(__dirname, 'compass-imagehelper.mustache');
+    options.template = path.join(__dirname, 'compass-imagehelper.mustache');
 
   if (!options.targetFile)
-      options.targetFile = '_compass-imagehelper.scss';
+    options.targetFile = '_compass-imagehelper.scss';
 
   if (!options.prefix)
-      options.prefix = '';
+    options.prefix = '';
 
   var template = fs.readFileSync(options.template).toString();
 
@@ -48,7 +48,7 @@ module.exports = function (options) {
   var bufferContents = function (file) {
     if (!options.images_path) {
       // autodetect images_path with the first file
-      options.images_path = path.relative(appRoot,  file.base);
+      options.images_path = path.relative(appRoot, file.base);
     }
 
     var imageInfo = {};
