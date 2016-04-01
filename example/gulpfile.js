@@ -1,6 +1,6 @@
 var gulp               = require('gulp');
 var sass               = require('gulp-sass');
-var compassImagehelper = require('..');
+var compassImagehelper = require('../index');
 
 
 var paths = {
@@ -15,7 +15,7 @@ gulp.task('compass-imagehelper', function (cb) {
                 // template: 'your-compass-imagehelper.mustache',
                 images_path: 'images/',
                 css_path: 'css/',
-                prefix: 'icon--'
+                prefix: ''
             }))
             .pipe(gulp.dest('sass'));
 });
@@ -30,4 +30,8 @@ gulp.task('sass', function (cb) {
 gulp.task('watch', ['compass-imagehelper'], function () {
     gulp.watch(paths.images, ['compass-imagehelper']);
     gulp.watch(paths.sass, ['sass']);
+});
+
+gulp.task('default', ['compass-imagehelper'], function(cb){
+  return gulp.start('sass');
 });

@@ -3,75 +3,38 @@
 * Do NOT edit!
 **/
 
-$compass_imagehelper_imagesmap:(
-    "battery_50.png": "48" "48" "url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAQAAAD9CzEMAAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAACYktHRAD/h4/MvwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAJJJREFUWMNjYBgFAw0YiVbpjcbfSpw2Jlr7YOhbgD8O2Bn0GUTwqvnP8JrhEsNP3AqY8VpgzCBKwAmMDNwMPAzPyA0iEaJCQZT8OGCkPJhHk+moBaMWjFowagHta7T/lJsyGgejFoxaMGrBqAW0t+APUWb8Jt+CXURZsIN8/4kDO6u/gNUObviLYROD2OhowOAGAMHYHKJlyqIPAAAAAElFTkSuQmCC)" "1a8e0e102ea58d745f7728554a080ca2",
-    "battery_50.svg": "48" "48" "url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDQ4IDQ4Ij48cGF0aCBkPSJNMjguOTMgMjdMMjIgNDBWMjloLTRsMS4wNy0ySDE0djE0LjMzQzE0IDQyLjggMTUuMTkgNDQgMTYuNjcgNDRoMTQuNjdjMS40NyAwIDIuNjctMS4xOSAyLjY3LTIuNjdWMjdoLTUuMDh6Ii8+PHBhdGggZmlsbC1vcGFjaXR5PSIuMyIgZD0iTTMxLjMzIDhIMjhWNGgtOHY0aC0zLjMzQzE1LjE5IDggMTQgOS4xOSAxNCAxMC42N1YyN2g1LjA3TDI2IDE0djExaDRsLTEuMDcgMkgzNFYxMC42N0MzNCA5LjE5IDMyLjgxIDggMzEuMzMgOHoiLz48L3N2Zz4=)" "8af178def8e2ba93e999b275a85e011c",
-);
+@if not(function-exists('inline-image')) {
 
-%icon--battery_50-png {
-    // Available properties:
-    // prefix: icon--;
-    // width: 48;
-    // height: 48;
-    // filename: battery_50.png;
-    // basename: battery_50;
-    // ext: .png;
-    // path: battery_50.png;
-    // fullname: battery_50-png;
-    // mime: image/png;
-    // hash: 1a8e0e102ea58d745f7728554a080ca2;
-    background-image: inline-image("battery_50.png");
-}
-%icon--battery_50-svg {
-    // Available properties:
-    // prefix: icon--;
-    // width: 48;
-    // height: 48;
-    // filename: battery_50.svg;
-    // basename: battery_50;
-    // ext: .svg;
-    // path: battery_50.svg;
-    // fullname: battery_50-svg;
-    // mime: image/svg+xml;
-    // hash: 8af178def8e2ba93e999b275a85e011c;
-    background-image: inline-image("battery_50.svg");
-}
+  @function compassImagehelper_getList($image) {
+    @if map-has-key($compass-imagehelper-imagesmap, $image) {
+      $list: map-get($compass-imagehelper-imagesmap, $image);
+      @if type-of($list) == 'list' {
+        @return $list;
+      }
+    }
+    @warn 'No image with name `#{$image}` found';
+    @return false;
+  }
 
-
-
-@if not(function_exists('inline-image')) {
   // Embeds the contents of an image directly inside your stylesheet, eliminating the need for another HTTP request. For small images, this can be a performance
   // benefit at the cost of a larger generated CSS file.
   @function inline-image($image) {
-    @if map-has-key($compass_imagehelper_imagesmap, $image) {
-      $list: map-get($compass_imagehelper_imagesmap, $image);
-      @return unquote(nth($list, 3));
-    }
-    @return null;
+    $list: compassImagehelper_getList($image);
+    @return unquote(nth($list, 3));
   }
 
   // Returns the width of the image found at the path supplied by $image relative to your project's images directory.
   @function image-width($image) {
-    @if map-has-key($compass_imagehelper_imagesmap, $image) {
-      $list: map-get($compass_imagehelper_imagesmap, $image);
-      $width: unquote(nth($list, 1));
-      @if ($width and str_length($width) > 0) {
-        @return number($width) * 1px;
-      }
-    }
-    @return null;
+    $list: compassImagehelper_getList($image);
+    $width: nth($list, 1);
+    @return $width * 1px;
   }
 
   // Returns the height of the image found at the path supplied by $image relative to your project's images directory.
   @function image-height($image) {
-    @if map-has-key($compass_imagehelper_imagesmap, $image) {
-      $list: map-get($compass_imagehelper_imagesmap, $image);
-      $height: unquote(nth($list, 2));
-      @if ($height and str_length($height)>0) {
-        @return number($height) * 1px;
-      }
-    }
-    @return null;
+    $list: compassImagehelper_getList($image);
+    $height: nth($list, 2);
+    @return $height * 1px;
   }
 
   // Generates a path to an asset found relative to the project's images directory.
@@ -79,22 +42,22 @@ $compass_imagehelper_imagesmap:(
   // The third argument is used to control the cache buster on a per-use basis. When set to false no cache buster will be used.
   // When true a md5-hash of the file is appended to the url. When a string, that value will be used as the cache buster.
   @function image-url($image, $only-path: false, $cache-buster: false) {
-    $result: "../images/" + $image;
+    $result: '../images/' + $image;
 
     @if ($cache-buster == true) {
       @if not (image-exists($image)) {
-        @warn "Image '#{$image}' not found. Cache-busting failed";
+        @warn 'Image `#{$image} not found. Cache-busting failed';
       } @else {
-        @if map-has-key($compass_imagehelper_imagesmap, $image) {
-          $list: map-get($compass_imagehelper_imagesmap, $image);
+        @if map-has-key($compass-imagehelper-imagesmap, $image) {
+          $list: map-get($compass-imagehelper-imagesmap, $image);
           $hash: nth($list, 4);
-          $result: #{$result} + '?' + $hash;
+          $result: $result + '?' + $hash;
         }
       }
     } @else if ($cache-buster == false) {
     } @else {
       // probably a string
-      $result: #{$result} + '?' + $cache-buster;
+      $result: $result + '?' + $cache-buster;
     }
     $result: quote($result);
     @if ($only-path == false) {
@@ -106,65 +69,75 @@ $compass_imagehelper_imagesmap:(
   // Returns if the image is accessible for these image-helpers
   // Note: Not part of the official compass functions, but still useful
   @function image-exists($image) {
-    @return map-has-key($compass_imagehelper_imagesmap, $image);
+    @return map-has-key($compass-imagehelper-imagesmap, $image);
   }
 
-  // Two helper functions for casting string to number by Hugo Giraudel
-  // http://hugogiraudel.com/2014/01/15/sass-string-to-number/
-  // http://sassmeister.com/gist/9647408
-  @function _length($number, $unit) {
-    $strings: 'px' 'cm' 'mm' '%' 'ch' 'pica' 'in' 'em' 'rem' 'pt' 'pc' 'ex' 'vw' 'vh' 'vmin' 'vmax';
-    $units: 1px 1cm 1mm 1% 1ch 1 pica 1in 1em 1rem 1pt 1pc 1ex 1vw 1vh 1vmin 1vmax;
-    $index: index($strings, $unit);
+}
 
-    @if not ($index) {
-      @warn "Unknown unit `#{$unit}`.";
-      @return false;
-    }
+$compass-imagehelper-imagesmap:(
+    '50.png': 48 48 url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAQAAAD9CzEMAAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAACYktHRAD/h4/MvwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAJJJREFUWMNjYBgFAw0YiVbpjcbfSpw2Jlr7YOhbgD8O2Bn0GUTwqvnP8JrhEsNP3AqY8VpgzCBKwAmMDNwMPAzPyA0iEaJCQZT8OGCkPJhHk+moBaMWjFowagHta7T/lJsyGgejFoxaMGrBqAW0t+APUWb8Jt+CXURZsIN8/4kDO6u/gNUObviLYROD2OhowOAGAMHYHKJlyqIPAAAAAElFTkSuQmCC") 1a8e0e102ea58d745f7728554a080ca2,
+    'battery@50.png': 48 48 url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAQAAAD9CzEMAAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAACYktHRAD/h4/MvwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAJJJREFUWMNjYBgFAw0YiVbpjcbfSpw2Jlr7YOhbgD8O2Bn0GUTwqvnP8JrhEsNP3AqY8VpgzCBKwAmMDNwMPAzPyA0iEaJCQZT8OGCkPJhHk+moBaMWjFowagHta7T/lJsyGgejFoxaMGrBqAW0t+APUWb8Jt+CXURZsIN8/4kDO6u/gNUObviLYROD2OhowOAGAMHYHKJlyqIPAAAAAElFTkSuQmCC") 1a8e0e102ea58d745f7728554a080ca2,
+    'battery_50.png': 48 48 url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAQAAAD9CzEMAAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAACYktHRAD/h4/MvwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAJJJREFUWMNjYBgFAw0YiVbpjcbfSpw2Jlr7YOhbgD8O2Bn0GUTwqvnP8JrhEsNP3AqY8VpgzCBKwAmMDNwMPAzPyA0iEaJCQZT8OGCkPJhHk+moBaMWjFowagHta7T/lJsyGgejFoxaMGrBqAW0t+APUWb8Jt+CXURZsIN8/4kDO6u/gNUObviLYROD2OhowOAGAMHYHKJlyqIPAAAAAElFTkSuQmCC") 1a8e0e102ea58d745f7728554a080ca2,
+    'battery_50.svg': 48 48 url("data:image/svg+xml;charset=US-ASCII,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Cpath d='M28.93 27L22 40V29h-4l1.07-2H14v14.33C14 42.8 15.19 44 16.67 44h14.67c1.47 0 2.67-1.19 2.67-2.67V27h-5.08z'/%3E%3Cpath fill-opacity='.3' d='M31.33 8H28V4h-8v4h-3.33C15.19 8 14 9.19 14 10.67V27h5.07L26 14v11h4l-1.07 2H34V10.67C34 9.19 32.81 8 31.33 8z'/%3E%3C/svg%3E") 8af178def8e2ba93e999b275a85e011c,
+);
 
-    @return $number * nth($units, $index);
-  }
-
-  @function number($string) {
-    // Matrices
-    $strings: '0' '1' '2' '3' '4' '5' '6' '7' '8' '9';
-    $numbers: 0 1 2 3 4 5 6 7 8 9;
-
-    // Result
-    $result: 0;
-    $divider: 0;
-    $minus: false;
-
-    // Looping through all characters
-    @for $i from 1 through str-length($string) {
-      $character: str-slice($string, $i, $i);
-      $index: index($strings, $character);
-
-      @if $character == '-' {
-        $minus: true;
-      } @else if $character == '.' {
-        $divider: 1;
-      } @else {
-        @if not ($index) {
-          $result: if($minus, $result * -1, $result);
-          @return _length($result, str-slice($string, $i));
-        }
-
-        $number: nth($numbers, $index);
-
-        @if $divider == 0 {
-          $result: $result * 10;
-        } @else {
-          // Move the decimal dot to the left
-          $divider: $divider * 10;
-          $number: $number / $divider;
-        }
-
-        $result: $result + $number;
-      }
-    }
-
-    @return if($minus, $result * -1, $result);
-  }
-
+%_50-png {
+  // Available properties:
+  // prefix: ;
+  // width: 48;
+  // height: 48;
+  // filename: 50.png;
+  // basename: 50;
+  // dirname: images;
+  // ext: .png;
+  // path: 50.png;
+  // fullname: _50-png;
+  // mime: image/png;
+  // hash: 1a8e0e102ea58d745f7728554a080ca2;
+  background-image: inline-image('50.png');
+}
+%battery\@50-png {
+  // Available properties:
+  // prefix: ;
+  // width: 48;
+  // height: 48;
+  // filename: battery@50.png;
+  // basename: battery@50;
+  // dirname: images;
+  // ext: .png;
+  // path: battery@50.png;
+  // fullname: battery\@50-png;
+  // mime: image/png;
+  // hash: 1a8e0e102ea58d745f7728554a080ca2;
+  background-image: inline-image('battery@50.png');
+}
+%battery_50-png {
+  // Available properties:
+  // prefix: ;
+  // width: 48;
+  // height: 48;
+  // filename: battery_50.png;
+  // basename: battery_50;
+  // dirname: images;
+  // ext: .png;
+  // path: battery_50.png;
+  // fullname: battery_50-png;
+  // mime: image/png;
+  // hash: 1a8e0e102ea58d745f7728554a080ca2;
+  background-image: inline-image('battery_50.png');
+}
+%battery_50-svg {
+  // Available properties:
+  // prefix: ;
+  // width: 48;
+  // height: 48;
+  // filename: battery_50.svg;
+  // basename: battery_50;
+  // dirname: images;
+  // ext: .svg;
+  // path: battery_50.svg;
+  // fullname: battery_50-svg;
+  // mime: image/svg+xml;
+  // hash: 8af178def8e2ba93e999b275a85e011c;
+  background-image: inline-image('battery_50.svg');
 }
