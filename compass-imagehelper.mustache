@@ -27,14 +27,14 @@
   @function image-width($image) {
     $list: compassImagehelper_getList($image);
     $width: nth($list, 1);
-    @return $width;
+    @return $width * 1px;
   }
 
   // Returns the height of the image found at the path supplied by $image relative to your project's images directory.
   @function image-height($image) {
     $list: compassImagehelper_getList($image);
     $height: nth($list, 2);
-    @return $height;
+    @return $height * 1px;
   }
 
   // Generates a path to an asset found relative to the project's images directory.
