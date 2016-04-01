@@ -10,7 +10,6 @@
   "license": "MIT",
   "devDependencies": {
     "gulp": "^3.8.10",
-    "gulp-compass-imagehelper": "^0.2.2",
-    "gulp-sass": "^1.3.2"
+    "gulp-sass": "^2.2.0"
   }
 }

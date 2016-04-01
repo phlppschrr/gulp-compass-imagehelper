@@ -65,7 +65,6 @@ Your mustache template can use all of theses properties. The default template on
 * ```items[i].hash``` MD5 Hash of the file, used for cache-busting
 
 ## Credits
-* Thanks to Hugo Giraudel: I included two sass functions for casting string to number [found in his blog post.](http://hugogiraudel.com/2014/01/15/sass-string-to-number/) 
 * The icons in the example directory are taken from [Google/Material Design Icons](https://github.com/google/material-design-icons) 
 * Some code lines are taken from [https://github.com/Sunify/gulp-baseimg](https://github.com/Sunify/gulp-baseimg)
 
