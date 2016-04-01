@@ -6,8 +6,6 @@ var mustache = require('mustache');
 var sizeOf = require('image-size');
 var mime = require('mime');
 var md5 = require('md5');
-var SVGO = require('svgo');
-var svgo = new SVGO();
 var appRoot = require('app-root-path').path;
 
 module.exports = function (options) {
@@ -61,22 +59,17 @@ module.exports = function (options) {
     var dimensions;
 
     if (mimetype == 'image/svg+xml') {
-      //data = encodeURIComponent(file.contents.toString());
-      //encoding = 'utf8';
-      data = file.contents.toString('base64');
-      encoding = 'base64';
-      try {
-        dimensions = sizeOf(file.path);
-      } catch (e) {
-        // could not read width/height from svg. Try again with the slower svgo parser:
-        svgo.optimize(file.contents.toString(), function (res) {
-          dimensions = {
-            width: res.info.width,
-            height: res.info.height,
-          };
-        });
-      }
-
+      data = file.contents.toString()
+          .replace(/"/g, '\'')
+          .replace(/%/g, '%25')
+          .replace(/</g, '%3C')
+          .replace(/>/g, '%3E')
+          .replace(/&/g, '%26')
+          .replace(/#/g, '%23')
+          .replace(/\s+/g, ' ')
+          .trim();
+      encoding = 'charset=US-ASCII';
+      dimensions = sizeOf(file.path);
     } else {
       data = file.contents.toString('base64');
       encoding = 'base64';
@@ -94,7 +87,7 @@ module.exports = function (options) {
     // Replace /, \ and . with -
     imageInfo.fullname = imageInfo.path.replace(/[\/\\\.]/g, '-');
     imageInfo.hash = md5(file.contents);
-    imageInfo.data = 'url(data:' + mimetype + ';' + encoding + ',' + data + ')';
+    imageInfo.data = 'url("data:' + mimetype + ';' + encoding + ',' + data + '")';
     images.push(imageInfo);
 
   };
