@@ -1,6 +1,6 @@
 {
   "name": "gulp-compass-imagehelper",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "gulp plugin for providing the compass imagehelper functions to node-sass enviroments.",
   "author": "Philipp Schreier <git@rgb10.de>",
   "keywords": [
